@@ -23,7 +23,7 @@ def createpost():
 
         flash(f"You have created a post: {post_title}", 'info')
 
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
     return render_template('createpost.html', title=title, form=form)
 
@@ -83,4 +83,4 @@ def post_delete(post_id):
         db.session.commit()
         flash(f'{post.title} has been deleted', 'info')
         return redirect(url_for('blog.myposts'))
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))

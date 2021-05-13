@@ -31,6 +31,7 @@ def create_app(config_class=Config):
         from app.blueprints.blog import bp as blog
         app.register_blueprint(blog)
 
-        from . import routes
+        from app.blueprints.main import bp as main
+        app.register_blueprint(main)
 
     return app
