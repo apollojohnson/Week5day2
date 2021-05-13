@@ -21,7 +21,7 @@ def register():
         existing_user = User.query.filter((User.username == username) | (User.email == email)).all()
         if existing_user:
             flash('That username or email already exists. Please try again', 'danger')
-            return redirect(url_for('register'))
+            return redirect(url_for('auth.register'))
         
         new_user = User(username, email, password)
         db.session.add(new_user)
@@ -33,7 +33,7 @@ def register():
         msg.body = f'Dear {username}, thank you so much for signing up for this super cool app. I hope you enjoy and also you look super good today!'
         mail.send(msg)
 
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
 
     return render_template('register.html', title=title, form=form)
@@ -50,11 +50,11 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user is None or not check_password_hash(user.password, password):
             flash('Incorrect Username/Password. Please try again.', 'danger')
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
         
         login_user(user, remember=form.remember_me.data)
         flash('You have succesfully logged in!', 'success')
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
 
     return render_template('login.html', title=title, form=form)
 
@@ -63,4 +63,4 @@ def login():
 def logout():
     logout_user()
     flash('You have successfully logged out!', 'primary')
-    return redirect(url_for('index'))
+    return redirect(url_for('main.index'))

@@ -1,7 +1,8 @@
-from flask import current_app as app, render_template
+from . import bp as main
+from flask import render_template
 from app.blueprints.blog.models import Post
 
-@app.route('/')
+@main.route('/')
 def index():
     context = {
        'title': 'HOME',
