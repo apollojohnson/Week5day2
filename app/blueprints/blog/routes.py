@@ -6,81 +6,91 @@ from .forms import PostForm, DeletePostForm
 from .models import Post
 
 
-@blog.route('/createpost', methods=['GET', 'POST'])
+@blog.route('/createcontact', methods=['GET', 'POST'])
 @login_required
-def createpost():
-    title = 'CREATE POST'
+def createcontact():
+    title = 'CREATE CONTACT'
     form = PostForm()
     if request.method == 'POST' and form.validate_on_submit():
-        post_title = form.title.data
-        post_body = form.body.data
+        post_firstname = form.firstname.data
+        post_lastname = form.lastname.data
+        post_email =  form.email.data
+        post_address = form.address.data
+        post_phonenumber = form.phonenumber.data
         user_id = current_user.id
 
-        new_post = Post(post_title, post_body, user_id)
+        new_post = Post(post_firstname, post_lastname, post_email, post_address, post_phonenumber, user_id)
 
         db.session.add(new_post)
         db.session.commit()
 
-        flash(f"You have created a post: {post_title}", 'info')
+        flash(f"You have created a post: {post_firstname}", 'info')
 
         return redirect(url_for('main.index'))
 
-    return render_template('createpost.html', title=title, form=form)
+    return render_template('createcontact.html', title=title, form=form)
 
 
-@blog.route('/myposts')
+@blog.route('/contacts')
 @login_required
-def myposts():
-    title = 'MY POSTS'
+def contacts():
+    title = 'MY CONTACTS'
     posts = Post.query.filter_by(user_id=current_user.id).all()
-    return render_template('myposts.html', title=title, posts=posts)
+    return render_template('contacts.html', title=title, posts=posts)
 
 
-@blog.route('/posts/<int:post_id>')
-def post_detail(post_id):
+@blog.route('/contacts/<int:post_id>')
+def contact_detail(post_id):
     post = Post.query.get_or_404(post_id)
     context = {
         'post': post,
-        'title': post.title,
+        'title': post.firstname,
         'form': DeletePostForm()
     }
-    return render_template('post_detail.html', **context)
+    return render_template('contact_detail.html', **context)
 
 
-@blog.route('/posts/update/<int:post_id>', methods=['GET', 'POST'])
+@blog.route('/contacts/update/<int:post_id>', methods=['GET', 'POST'])
 @login_required
-def post_update(post_id):
+def contacts_update(post_id):
     post = Post.query.get_or_404(post_id)
     title = f'UPDATE {post.title}'
     if post.author.id != current_user.id:
-        flash("You cannot update another user's post. Who do you think you are?", "warning")
-        return redirect(url_for('blog.myposts'))
+        flash("You cannot update another user's contacts.", "warning")
+        return redirect(url_for('blog.mycontacts'))
     update_form = PostForm()
     if request.method == 'POST' and update_form.validate_on_submit():
-        post_title = update_form.title.data
-        post_body = update_form.body.data
+        post_firstname = update_form.firstname.data
+        post_lastname = update_form.lastname.data
+        post_email = update_form.email.data
+        post_address = update_form.address.data
+        post_phonenumber = update_form.phonenumber.data
+        
 
-        post.title = post_title
-        post.body = post_body
+        post.firstname = post_firstname
+        post.lastname = post_lastname
+        post.email = post_email
+        post.address = post_address
+        post.phonenumber = post_phonenumber
 
         db.session.commit()
 
-        return redirect(url_for('blog.post_detail', post_id=post.id))
+        return redirect(url_for('blog.contact_detail', post_id=post.id))
 
-    return render_template('post_update.html', title=title, post=post, form=update_form)
+    return render_template('contact_update.html', title=title, post=post, form=update_form)
 
 
-@blog.route('/posts/delete/<int:post_id>', methods=['POST'])
+@blog.route('/contacts/delete/<int:post_id>', methods=['POST'])
 @login_required
-def post_delete(post_id):
+def contact_delete(post_id):
     post = Post.query.get_or_404(post_id)
     if post.author.id != current_user.id:
-        flash("You cannot delete another user's post. Who do you think you are?", "warning")
-        return redirect(url_for('blog.myposts'))
+        flash("You cannot delete another user's contact.", "warning")
+        return redirect(url_for('blog.mycontacts'))
     form = DeletePostForm()
     if form.validate_on_submit():
         db.session.delete(post)
         db.session.commit()
         flash(f'{post.title} has been deleted', 'info')
-        return redirect(url_for('blog.myposts'))
+        return redirect(url_for('blog.mycontacts'))
     return redirect(url_for('main.index'))

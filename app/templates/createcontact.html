@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h4>Add a Contact!</h4>
+
+<form action="" method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <fieldset>
+            {{ form.firstname.label }}
+            {{ form.firstname(class='form-control', placeholder='First name') }}
+        </fieldset>
+        <fieldset>
+            {{ form.lastname.label }}
+            {{ form.lastname(class='form-control', placeholder='Last name') }}
+        </fieldset>
+        <fieldset>
+            {{ form.email.label }}
+            {{ form.email(class='form-control', placeholder='Email') }}
+        </fieldset>
+        <fieldset>
+            {{ form.address.label }}
+            {{ form.address(class='form-control', placeholder='Address') }}
+        </fieldset>
+
+        <fieldset>
+            {{ form.phonenumber.label }}
+            {{ form.phonenumber(class='form-control', placeholder='Phone') }}
+        </fieldset>
+
+        {{ form.submit(class='btn btn-success ') }}
+
+    </div>
+</form>
+
+{% endblock content %}

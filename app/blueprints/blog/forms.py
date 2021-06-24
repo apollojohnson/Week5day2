@@ -4,8 +4,11 @@ from wtforms.validators import DataRequired
 
 
 class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    body = StringField('Body', validators=[DataRequired()])
+    firstname = StringField('First Name', validators=[DataRequired()])
+    lastname = StringField('Last Name', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    address = StringField('Address', validators=[DataRequired()])
+    phonenumber = StringField('Phone Number', validators=[DataRequired()])
     submit = SubmitField()
 
 
